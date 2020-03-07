@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.logging.Level;
 
 import static lsieun.utils.LogUtils.audit;
-import static lsieun.utils.LogUtils.err;
 
 public class FileUtils {
 
@@ -25,7 +24,7 @@ public class FileUtils {
         makeFileDir(filepath);
         try (
                 FileOutputStream fout = new FileOutputStream(filepath);
-                BufferedOutputStream out = new BufferedOutputStream(fout);
+                BufferedOutputStream out = new BufferedOutputStream(fout)
         ) {
             out.write(bytes);
             out.flush();
@@ -71,13 +70,13 @@ public class FileUtils {
         try (
                 FileInputStream in = new FileInputStream(filepath);
                 InputStreamReader reader = new InputStreamReader(in, StandardCharsets.UTF_8);
-                BufferedReader br = new BufferedReader(reader);
+                BufferedReader br = new BufferedReader(reader)
         ) {
             for (String line = br.readLine(); line != null; line = br.readLine()) {
                 lines.add(line);
             }
         } catch (IOException ex) {
-            err.log(Level.SEVERE, "unexpected error: " + ex.getMessage(), ex);
+            audit.log(Level.SEVERE, "unexpected error: " + ex.getMessage(), ex);
         }
         return lines;
     }
@@ -87,7 +86,7 @@ public class FileUtils {
         try (
                 FileOutputStream out = new FileOutputStream(filepath);
                 OutputStreamWriter writer = new OutputStreamWriter(out, StandardCharsets.UTF_8);
-                BufferedWriter bw = new BufferedWriter(writer);
+                BufferedWriter bw = new BufferedWriter(writer)
         ) {
             for (String line : lines) {
                 bw.write(line);
@@ -95,7 +94,7 @@ public class FileUtils {
             }
 
         } catch (IOException ex) {
-            err.log(Level.SEVERE, "unexpected error: " + ex.getMessage(), ex);
+            audit.log(Level.SEVERE, "unexpected error: " + ex.getMessage(), ex);
         }
     }
 
@@ -104,7 +103,7 @@ public class FileUtils {
                 FileInputStream fin = new FileInputStream(from_path);
                 BufferedInputStream in = new BufferedInputStream(fin);
                 FileOutputStream fout = new FileOutputStream(to_path);
-                BufferedOutputStream out = new BufferedOutputStream(fout);
+                BufferedOutputStream out = new BufferedOutputStream(fout)
         ) {
             for (int b = in.read(); b != -1; b = in.read()) {
                 int value = (~b) & 0xFF;

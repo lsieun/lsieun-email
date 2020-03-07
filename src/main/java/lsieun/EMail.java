@@ -36,16 +36,22 @@ public class EMail {
                             if (StringUtils.isBlank(line)) continue;
                             if (line.startsWith("#")) continue;
 
-                            Message m = Message.fromStr(line);
-                            long ts = m.timestamp;
-                            String title = m.title;
-                            String text = m.text;
+                            try {
+                                Message m = Message.fromStr(line);
+                                if (m == null) continue;
 
-                            if (ts <= old_ts) continue;
+                                long ts = m.timestamp;
+                                String title = m.title;
+                                String text = m.text;
 
-                            EmailUtils.send(title, text);
-                            audit.info(() -> String.format("(%s) ===> %s, %s, %s", filename, ts, title, text));
-                            prefs.putLong(filename, m.timestamp);
+                                if (ts <= old_ts) continue;
+
+                                EmailUtils.send(title, text);
+                                audit.info(() -> String.format("(%s) ===> %s, %s, %s", filename, ts, title, text));
+                                prefs.putLong(filename, m.timestamp);
+                            } catch (Exception ex) {
+                                audit.log(Level.WARNING, "unexpected error: " + ex.getMessage(), ex);
+                            }
                         }
 
                     }
@@ -55,6 +61,7 @@ public class EMail {
                 audit.info("Wake up at " + DateUtils.toReadable(Const.SLEEP_TIME));
                 Thread.sleep(Const.SLEEP_TIME);
             } catch (Exception ex) {
+                EmailUtils.send("Email Error", "邮件服务出错了，请及时修复！");
                 audit.log(Level.WARNING, "unexpected error: " + ex.getMessage(), ex);
                 break;
             }

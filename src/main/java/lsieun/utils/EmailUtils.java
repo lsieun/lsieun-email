@@ -9,7 +9,7 @@ import java.util.Date;
 import java.util.Properties;
 import java.util.logging.Level;
 
-import static lsieun.utils.LogUtils.err;
+import static lsieun.utils.LogUtils.audit;
 
 public class EmailUtils {
     private static final String smtp_server = PropertyUtils.getProperty("smtp.server");
@@ -59,7 +59,7 @@ public class EmailUtils {
             trans.close();
             return true;
         } catch (Exception ex) {
-            err.log(Level.SEVERE, "unexpected error: " + ex.getMessage(), ex);
+            audit.log(Level.SEVERE, "unexpected error: " + ex.getMessage(), ex);
         }
         return false;
     }
