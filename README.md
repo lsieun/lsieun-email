@@ -3,7 +3,7 @@
 :bug:
 
 ```bash
-sh start.sh
+sh startup.sh
 ```
 
 ```bash
